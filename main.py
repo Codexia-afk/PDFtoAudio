@@ -9,11 +9,16 @@ book = askopenfilename(
 
 reader = PdfReader(book)
 
-player = pyttsx3.init()
+text = ""
 
 for page in reader.pages:
-    text = page.extract_text()
-    if text:
-        player.say(text)
+    page_text = page.extract_text()
+    if page_text:
+        text += page_text + "\n"
 
-player.runAndWait()   
+engine = pyttsx3.init()
+
+engine.save_to_file(text, "audiobook.mp3")
+engine.runAndWait()
+
+print("Audiobook saved as audiobook.mp3")
