@@ -1,14 +1,12 @@
-# 🎧 PDFtoAudio — Accessible AI Learning & Document Platform
+![PDFtoAudio Logo](asset/logo.jpg)
 
-> Turn any document into an accessible lesson you can listen to, understand, and remember.
-
-![PDFtoAudio Banner](asset/Screenshot.png)
+> **PDFtoAudio is an accessible AI learning & document audio studio. Convert PDFs, DOCX, & eBooks into neural audiobooks, 2-host AI podcasts, sentence-synced readers, flashcards, quizzes, and grounded Q&A chat with page citations.**
 
 ---
 
 ## 🌟 Vision & Positioning
 
-PDFtoAudio is an accessible, privacy-conscious AI learning and document audio platform that transforms PDFs, textbooks, research papers, and documents into interactive audio lessons, grounded Q&A study tools, and customizable revision materials.
+PDFtoAudio turns any document into an accessible lesson you can listen to, understand, and remember. It transforms PDFs, textbooks, research papers, and documents into interactive audio lessons, grounded Q&A study tools, and customizable revision materials.
 
 ---
 
