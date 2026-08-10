@@ -67,7 +67,7 @@ def main():
         print(f"  ➜ Server running at: {server_url}")
         print("  ➜ Press Ctrl+C to stop the server\n")
 
-        if not args.no-browser:
+        if not args.no_browser:
             webbrowser.open(server_url)
 
         uvicorn.run("backend.app:app", host=args.host, port=args.port, reload=False)
