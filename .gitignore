@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+*.mp3
+*.vtt
+*.srt
+.DS_Store
+.env
+build/
+dist/
+*.spec
