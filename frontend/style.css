@@ -146,12 +146,12 @@ body {
     gap: 16px;
 }
 
-.logo-icon {
-    font-size: 2rem;
-    background: var(--primary);
-    color: #ffffff;
-    padding: 10px;
-    border-radius: var(--radius-md);
+.app-logo-img {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    object-fit: cover;
+    border: 1px solid var(--card-border);
 }
 
 .logo-text h1 {
