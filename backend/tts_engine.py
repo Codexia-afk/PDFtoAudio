@@ -78,6 +78,25 @@ def generate_speech_gtts(text: str, lang: str = "en") -> bytes:
             os.remove(tmp_path)
 
 
+PRONUNCIATION_DICTIONARY = {
+    r'\be\.g\.\b': 'for example',
+    r'\bi\.e\.\b': 'that is',
+    r'\betc\.\b': 'et cetera',
+    r'\bvs\.\b': 'versus',
+    r'\bAI\b': 'A I',
+    r'\bAPI\b': 'A P I',
+    r'\bPDF\b': 'P D F',
+    r'\bURL\b': 'U R L',
+}
+
+def apply_pronunciation_dictionary(text: str) -> str:
+    """Applies pronunciation dictionary replacements for abbreviations and acronyms."""
+    import re
+    for pattern, replacement in PRONUNCIATION_DICTIONARY.items():
+        text = re.sub(pattern, replacement, text, flags=re.IGNORECASE)
+    return text
+
+
 async def synthesize_text_to_audio(text: str, voice: str = "en-US-GuyNeural", rate: str = "+0%") -> bytes:
     """
     Main entrypoint for text synthesis.
@@ -86,8 +105,7 @@ async def synthesize_text_to_audio(text: str, voice: str = "en-US-GuyNeural", ra
     if not text or not text.strip():
         text = "No text available for conversion."
 
-    # Limit maximum batch size per request if text is extremely long (clip to 100,000 chars for single audio)
-    text = text[:100000]
+    text = apply_pronunciation_dictionary(text[:100000])
 
     try:
         return await generate_speech_edge_tts(text=text, voice=voice, rate=rate)
@@ -95,3 +113,4 @@ async def synthesize_text_to_audio(text: str, voice: str = "en-US-GuyNeural", ra
         print(f"Edge TTS error ({e}), switching to gTTS fallback...")
         lang_code = voice.split("-")[0] if "-" in voice else "en"
         return generate_speech_gtts(text=text, lang=lang_code)
+

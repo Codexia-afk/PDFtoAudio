@@ -5,16 +5,18 @@ import os
 from backend.tts_engine import generate_speech_edge_tts
 
 
-def generate_podcast_script(pdf_text: str, max_turns: int = 10):
+def generate_podcast_script(sentences_data: list, max_turns: int = 8):
     """
-    Transforms PDF text into a 2-host conversational podcast script.
-    Host A: Alex (Lead Host / Presenter)
-    Host B: Sam (Co-Host / Inquirer)
+    Transforms PDF sentence objects into a 2-host conversational podcast script with page citations.
+    Host A: Alex (Male Storyteller)
+    Host B: Sam (Female Studio Host)
     """
-    # Clean and extract main sentences
-    sentences = [s.strip() for s in re.split(r'(?<=[.!?])\s+', pdf_text) if len(s.strip()) > 15]
-    if not sentences:
-        sentences = ["This document contains interesting insights that we are exploring today."]
+    if not sentences_data:
+        sentences_data = [{"text": "This document contains insightful facts.", "page_number": 1}]
+
+    # Convert raw text strings to sentence objects if necessary
+    if isinstance(sentences_data, str):
+        sentences_data = [{"text": s.strip(), "page_number": 1} for s in re.split(r'(?<=[.!?])\s+', sentences_data) if len(s.strip()) > 15]
 
     script_turns = []
 
@@ -22,47 +24,55 @@ def generate_podcast_script(pdf_text: str, max_turns: int = 10):
     script_turns.append({
         "speaker": "Alex",
         "voice": "en-US-AndrewNeural",
-        "text": "Welcome back everyone to the PDF Deep Dive podcast! Today we are discussing an insightful document that was just uploaded."
+        "text": "Welcome to PDFtoAudio Deep Dive podcast! Today we are reviewing an uploaded document.",
+        "page_reference": 1
     })
     script_turns.append({
         "speaker": "Sam",
         "voice": "en-US-AvaNeural",
-        "text": "Thanks Alex! I've been reviewing the pages, and there are some fascinating takeaways here. Where should we kick things off?"
+        "text": "Thanks Alex! Let's examine the main findings and page references in detail.",
+        "page_reference": 1
     })
 
-    # Group sentences into chunks for dynamic discussion
-    chunk_size = max(1, len(sentences) // min(max_turns, max(1, len(sentences))))
-    for i in range(0, min(len(sentences), max_turns * chunk_size), chunk_size):
-        chunk = " ".join(sentences[i:i + chunk_size])
+    chunk_size = max(1, len(sentences_data) // min(max_turns, max(1, len(sentences_data))))
+    for i in range(0, min(len(sentences_data), max_turns * chunk_size), chunk_size):
+        chunk_items = sentences_data[i:i + chunk_size]
+        chunk_text = " ".join(s["text"] for s in chunk_items)
+        page_num = chunk_items[0].get("page_number", 1)
 
         if i % 2 == 0:
             script_turns.append({
                 "speaker": "Alex",
                 "voice": "en-US-AndrewNeural",
-                "text": f"One key section highlights that {chunk}"
+                "text": f"According to Page {page_num}: {chunk_text}",
+                "page_reference": page_num
             })
             script_turns.append({
                 "speaker": "Sam",
                 "voice": "en-US-AvaNeural",
-                "text": "That's a super interesting point. It really changes how we think about this topic."
+                "text": f"That's a key takeaway from Page {page_num}. It directly supports the core topic.",
+                "page_reference": page_num
             })
         else:
             script_turns.append({
                 "speaker": "Sam",
                 "voice": "en-US-AvaNeural",
-                "text": f"Furthermore, the document explains that {chunk}"
+                "text": f"Moving to section on Page {page_num}: {chunk_text}",
+                "page_reference": page_num
             })
             script_turns.append({
                 "speaker": "Alex",
                 "voice": "en-US-AndrewNeural",
-                "text": "Exactly. This leads into the broader conclusions drawn by the author."
+                "text": f"Exactly. That sums up the key conclusion on Page {page_num}.",
+                "page_reference": page_num
             })
 
     # Outro turn
     script_turns.append({
         "speaker": "Alex",
         "voice": "en-US-AndrewNeural",
-        "text": "That wraps up our quick episode on this document! Thank you all for listening to PDF Deep Dive."
+        "text": "That concludes our educational overview for this episode. Thank you for listening!",
+        "page_reference": sentences_data[-1].get("page_number", 1) if sentences_data else 1
     })
 
     return script_turns

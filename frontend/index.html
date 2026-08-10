@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PDFtoAudio v2 — AI Audio & Podcast Studio</title>
+    <title>PDFtoAudio — Accessible AI Learning & Document Studio</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&family=Open+Dyslexic&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
@@ -15,148 +15,280 @@
         <div class="glow-orb orb-2"></div>
     </div>
 
-    <div class="app-container">
-        <!-- Header -->
-        <header class="app-header">
-            <div class="logo-group">
-                <div class="logo-icon">🎧</div>
-                <div class="logo-text">
-                    <h1>PDFtoAudio <span class="badge-v2">v2.0 AI</span></h1>
-                    <p>Transform PDF documents into Neural AI Audiobooks & 2-Host Podcasts</p>
+    <!-- Main Navigation Bar -->
+    <header class="app-header" role="banner">
+        <div class="logo-group">
+            <div class="logo-icon" aria-hidden="true">🎧</div>
+            <div class="logo-text">
+                <h1>PDFtoAudio <span class="badge-v2">Learning Platform</span></h1>
+                <p>Turn any document into an accessible lesson you can listen to, understand, and remember.</p>
+            </div>
+        </div>
+
+        <nav class="main-nav" aria-label="Main Navigation">
+            <button class="nav-btn active" data-target="viewLibrary" aria-controls="viewLibrary">📚 Library</button>
+            <button class="nav-btn" data-target="viewStudio" aria-controls="viewStudio">📖 Reader & Studio</button>
+            <button class="nav-btn" data-target="viewChat" aria-controls="viewChat">💬 Doc Chat</button>
+            <button class="nav-btn" data-target="viewStudy" aria-controls="viewStudy">🧠 Study Suite</button>
+            <button id="accessibilityToggleBtn" class="btn-secondary btn-sm" aria-label="Toggle Accessibility Panel">♿ Accessibility</button>
+        </nav>
+    </header>
+
+    <!-- Main Content Views -->
+    <main class="app-container" role="main">
+
+        <!-- VIEW 1: Document Library Dashboard -->
+        <section id="viewLibrary" class="view-panel">
+            <div class="library-hero">
+                <div class="dropzone" id="dropzone" role="region" aria-label="File Upload Dropzone" tabindex="0">
+                    <div class="dropzone-icon" aria-hidden="true">📄</div>
+                    <h2>Upload Document to Begin</h2>
+                    <p>Drag & drop PDF, DOCX, TXT, MD, or EPUB files here or click to browse</p>
+                    <input type="file" id="pdfFileInput" accept=".pdf,.docx,.txt,.md,.epub" class="file-input" aria-label="Upload document file">
+                    <div class="supported-tags">
+                        <span>⚡ Multi-Format Parser</span>
+                        <span>🎙️ 50+ Neural Voices</span>
+                        <span>🧠 Study Suite & Quizzes</span>
+                        <span>♿ Dyslexia & High-Contrast</span>
+                    </div>
                 </div>
             </div>
-            <div class="header-actions">
-                <span class="status-indicator"><span class="dot"></span> Neural Engine Ready</span>
-            </div>
-        </header>
 
-        <!-- Main Upload Hero (Shown initially) -->
-        <section id="uploadSection" class="upload-hero">
-            <div class="dropzone" id="dropzone">
-                <div class="dropzone-icon">📄</div>
-                <h2>Drop your PDF file here</h2>
-                <p>or click to browse from your device</p>
-                <input type="file" id="pdfFileInput" accept=".pdf" class="file-input">
-                <div class="supported-tags">
-                    <span>⚡ PyMuPDF Engine</span>
-                    <span>🎙️ 50+ Neural Voices</span>
-                    <span>📻 AI Podcast Mode</span>
+            <!-- Library Collection Table -->
+            <div class="library-section">
+                <div class="section-header">
+                    <h3>📚 Your Document Library</h3>
+                    <div class="library-search">
+                        <input type="text" id="librarySearchInput" placeholder="Search documents..." class="custom-input" aria-label="Search document library">
+                    </div>
+                </div>
+                <div id="libraryGrid" class="library-grid">
+                    <p class="empty-msg">No documents in library yet. Upload a file above to get started!</p>
                 </div>
             </div>
         </section>
 
-        <!-- Studio Workspace (Hidden until PDF uploaded) -->
-        <main id="studioWorkspace" class="studio-workspace hidden">
-            <!-- Left Panel: PDF Document & Reader -->
-            <section class="panel pdf-panel">
-                <div class="panel-header">
-                    <div class="panel-title">
-                        <span class="icon">📖</span>
-                        <h3 id="pdfFilename">Document.pdf</h3>
-                    </div>
-                    <button id="reuploadBtn" class="btn-secondary btn-sm">🔄 Change PDF</button>
-                </div>
-
-                <!-- Metadata Summary Pills -->
-                <div class="metadata-bar">
-                    <div class="meta-pill"><span class="label">Pages</span><span id="metaPages" class="val">0</span></div>
-                    <div class="meta-pill"><span class="label">Words</span><span id="metaWords" class="val">0</span></div>
-                    <div class="meta-pill"><span class="label">Est. Time</span><span id="metaTime" class="val">0 min</span></div>
-                </div>
-
-                <!-- Chapter Selector -->
-                <div class="chapter-bar">
-                    <label for="chapterSelect">Chapter / Section:</label>
-                    <select id="chapterSelect" class="custom-select"></select>
-                </div>
-
-                <!-- Text Display Box (with sentence sync Karaoke) -->
-                <div id="readerContent" class="reader-content">
-                    <p class="placeholder-text">Select a chapter to view text content...</p>
-                </div>
-            </section>
-
-            <!-- Right Panel: Audio Control Studio -->
-            <section class="panel studio-panel">
-                <div class="panel-header">
-                    <div class="panel-title">
-                        <span class="icon">🎛️</span>
-                        <h3>Audio Studio Controls</h3>
-                    </div>
-                </div>
-
-                <!-- Studio Mode Tabs -->
-                <div class="mode-tabs">
-                    <button class="mode-tab active" data-mode="audiobook">🎧 Audiobook</button>
-                    <button class="mode-tab" data-mode="podcast">🎙️ AI Podcast</button>
-                    <button class="mode-tab" data-mode="subtitles">📑 Captions/Export</button>
-                </div>
-
-                <!-- Audiobook Mode Options -->
-                <div id="modeOptionsAudiobook" class="mode-options-panel">
-                    <div class="form-group">
-                        <label for="voiceSelect">Neural AI Voice:</label>
-                        <select id="voiceSelect" class="custom-select"></select>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group half">
-                            <label for="speedSelect">Speaking Speed:</label>
-                            <select id="speedSelect" class="custom-select">
-                                <option value="0.75x">0.75x (Slower)</option>
-                                <option value="+0%" selected>1.0x (Normal)</option>
-                                <option value="+25%">1.25x (Fast)</option>
-                                <option value="+50%">1.5x (Faster)</option>
-                                <option value="+100%">2.0x (Speedy)</option>
-                            </select>
+        <!-- VIEW 2: Reader & Audio Studio Workspace -->
+        <section id="viewStudio" class="view-panel hidden">
+            <div class="studio-workspace">
+                <!-- Left Panel: Reader View -->
+                <section class="panel pdf-panel" aria-label="Document Reader Panel">
+                    <div class="panel-header">
+                        <div class="panel-title">
+                            <span class="icon" aria-hidden="true">📖</span>
+                            <h3 id="pdfFilename">Document.pdf</h3>
                         </div>
-                        <div class="form-group half">
-                            <label for="scopeSelect">Conversion Scope:</label>
-                            <select id="scopeSelect" class="custom-select">
-                                <option value="chapter" selected>Current Chapter</option>
-                                <option value="full">Entire Document</option>
-                            </select>
+                        <div class="header-btns">
+                            <button id="addNoteBtn" class="btn-secondary btn-sm">📌 Add Note</button>
+                            <button id="reuploadBtn" class="btn-secondary btn-sm">🔄 Switch Document</button>
                         </div>
                     </div>
+
+                    <div id="qualityReportBanner" class="quality-banner hidden" role="alert"></div>
+
+                    <!-- Metadata Bar -->
+                    <div class="metadata-bar">
+                        <div class="meta-pill"><span class="label">Pages</span><span id="metaPages" class="val">0</span></div>
+                        <div class="meta-pill"><span class="label">Words</span><span id="metaWords" class="val">0</span></div>
+                        <div class="meta-pill"><span class="label">Est. Time</span><span id="metaTime" class="val">0 min</span></div>
+                        <div class="meta-pill"><span class="label">Resume</span><button id="resumePlaybackBtn" class="btn-sm btn-primary">▶ Resume</button></div>
+                    </div>
+
+                    <div class="chapter-bar">
+                        <label for="chapterSelect">Chapter / Section:</label>
+                        <select id="chapterSelect" class="custom-select"></select>
+                    </div>
+
+                    <!-- Reader Content Box -->
+                    <div id="readerContent" class="reader-content" tabindex="0" aria-label="Document text reader">
+                        <p class="placeholder-text">Select a document from Library to start reading...</p>
+                    </div>
+                </section>
+
+                <!-- Right Panel: Audio Control Studio -->
+                <section class="panel studio-panel" aria-label="Audio Studio Panel">
+                    <div class="panel-header">
+                        <div class="panel-title">
+                            <span class="icon" aria-hidden="true">🎛️</span>
+                            <h3>Audio Controls & Modes</h3>
+                        </div>
+                    </div>
+
+                    <div class="mode-tabs" role="tablist">
+                        <button class="mode-tab active" data-mode="audiobook" role="tab" aria-selected="true">🎧 Audiobook</button>
+                        <button class="mode-tab" data-mode="podcast" role="tab" aria-selected="false">🎙️ AI Podcast</button>
+                        <button class="mode-tab" data-mode="subtitles" role="tab" aria-selected="false">📑 Captions/RSS</button>
+                    </div>
+
+                    <div id="modeOptionsAudiobook" class="mode-options-panel">
+                        <div class="form-group">
+                            <label for="voiceSelect">Neural Voice:</label>
+                            <select id="voiceSelect" class="custom-select"></select>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group half">
+                                <label for="speedSelect">Speed:</label>
+                                <select id="speedSelect" class="custom-select">
+                                    <option value="-25%">0.75x (Slower)</option>
+                                    <option value="+0%" selected>1.0x (Normal)</option>
+                                    <option value="+25%">1.25x (Fast)</option>
+                                    <option value="+50%">1.5x (Faster)</option>
+                                    <option value="+100%">2.0x (Speedy)</option>
+                                </select>
+                            </div>
+                            <div class="form-group half">
+                                <label for="scopeSelect">Scope:</label>
+                                <select id="scopeSelect" class="custom-select">
+                                    <option value="chapter" selected>Current Chapter</option>
+                                    <option value="full">Entire Document</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="modeOptionsPodcast" class="mode-options-panel hidden">
+                        <div class="podcast-info-box">
+                            <h4>🎙️ 2-Host AI Podcast Episode</h4>
+                            <p>Synthesizes an episode featuring <strong>Alex</strong> (Male Storyteller) and <strong>Sam</strong> (Female Studio Host) with page-level citations.</p>
+                        </div>
+                    </div>
+
+                    <div id="modeOptionsSubtitles" class="mode-options-panel hidden">
+                        <div class="subtitle-actions">
+                            <button id="exportVttBtn" class="btn-secondary">📥 .VTT Captions</button>
+                            <button id="exportSrtBtn" class="btn-secondary">📥 .SRT Captions</button>
+                            <button id="exportRssBtn" class="btn-secondary">📻 Podcast RSS Feed</button>
+                        </div>
+                    </div>
+
+                    <button id="generateAudioBtn" class="btn-primary btn-large">
+                        <span class="btn-icon">⚡</span> Generate AI Audio
+                    </button>
+
+                    <div class="visualizer-container">
+                        <canvas id="visualizerCanvas" aria-label="Audio Waveform Visualizer"></canvas>
+                    </div>
+
+                    <div class="player-container">
+                        <audio id="audioPlayer" controls class="custom-audio-player" aria-label="Audio player"></audio>
+                        <div class="player-extra-controls">
+                            <a id="downloadAudioBtn" class="btn-download hidden" download="audiobook.mp3">⬇️ Download MP3</a>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </section>
+
+        <!-- VIEW 3: Document Q&A Chat ("Trust Mode") -->
+        <section id="viewChat" class="view-panel hidden">
+            <div class="chat-container">
+                <div class="panel-header">
+                    <h3>💬 Document Q&A Chat (Trust Mode)</h3>
+                    <p class="muted-text">Ask questions about the uploaded document. Answers are strictly grounded with page citations.</p>
+                </div>
+                <div id="chatLog" class="chat-log" role="log" aria-live="polite">
+                    <div class="chat-msg assistant">
+                        <div class="msg-bubble">Ask me any question about your document! Every answer includes page citations.</div>
+                    </div>
+                </div>
+                <div class="chat-input-bar">
+                    <input type="text" id="chatQueryInput" placeholder="Ask a question about this document..." class="custom-input">
+                    <button id="sendChatBtn" class="btn-primary">Ask AI</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- VIEW 4: Study Suite (Summaries, Flashcards, Quizzes) -->
+        <section id="viewStudy" class="view-panel hidden">
+            <div class="study-dashboard">
+                <div class="study-tabs" role="tablist">
+                    <button class="study-tab active" data-tab="summary">📋 Summaries</button>
+                    <button class="study-tab" data-tab="flashcards">🎴 Flashcards</button>
+                    <button class="study-tab" data-tab="quiz">📝 Quiz & Practice</button>
                 </div>
 
-                <!-- AI Podcast Mode Options -->
-                <div id="modeOptionsPodcast" class="mode-options-panel hidden">
-                    <div class="podcast-info-box">
-                        <h4>🎙️ 2-Host Conversational Dialogue</h4>
-                        <p>Automatically transforms your PDF into an engaging 2-person podcast episode hosted by <strong>Alex</strong> (Male Storyteller) and <strong>Sam</strong> (Female Studio Host).</p>
+                <!-- Summary Panel -->
+                <div id="studyPanelSummary" class="study-content-panel">
+                    <div class="summary-mode-bar">
+                        <label for="summaryModeSelect">Summary Mode:</label>
+                        <select id="summaryModeSelect" class="custom-select">
+                            <option value="overview" selected>📋 Quick Overview</option>
+                            <option value="strict">🔒 Strict Read</option>
+                            <option value="deep_dive">🔬 Educational Deep Dive</option>
+                            <option value="explain_simply">💡 Explain Simply (ELI5)</option>
+                            <option value="professor">🎓 Professor Analysis</option>
+                            <option value="feynman">⚛️ Feynman Learning Technique</option>
+                        </select>
+                        <button id="generateSummaryBtn" class="btn-primary btn-sm">Generate Summary</button>
+                    </div>
+
+                    <div id="summaryResultsBox" class="summary-results-box">
+                        <p class="placeholder-text">Click 'Generate Summary' to produce educational breakdowns and key takeaways with citations.</p>
                     </div>
                 </div>
 
-                <!-- Subtitles Mode Options -->
-                <div id="modeOptionsSubtitles" class="mode-options-panel hidden">
-                    <div class="subtitle-actions">
-                        <button id="exportVttBtn" class="btn-secondary">📥 Download .VTT Captions</button>
-                        <button id="exportSrtBtn" class="btn-secondary">📥 Download .SRT Captions</button>
+                <!-- Flashcards Panel -->
+                <div id="studyPanelFlashcards" class="study-content-panel hidden">
+                    <div class="flashcard-actions">
+                        <button id="generateFlashcardsBtn" class="btn-primary btn-sm">Generate Flashcards</button>
+                        <button id="exportAnkiCsvBtn" class="btn-secondary btn-sm">📥 Export Anki CSV</button>
+                    </div>
+                    <div id="flashcardsGrid" class="flashcards-grid">
+                        <p class="placeholder-text">Click 'Generate Flashcards' to generate interactive revision cards.</p>
                     </div>
                 </div>
 
-                <!-- Synthesize Action Button -->
-                <button id="generateAudioBtn" class="btn-primary btn-large">
-                    <span class="btn-icon">⚡</span> Generate AI Audio
-                </button>
-
-                <!-- Audio Visualizer Canvas -->
-                <div class="visualizer-container">
-                    <canvas id="visualizerCanvas"></canvas>
-                </div>
-
-                <!-- Audio Player Container -->
-                <div class="player-container">
-                    <audio id="audioPlayer" controls class="custom-audio-player"></audio>
-                    <div class="player-extra-controls">
-                        <a id="downloadAudioBtn" class="btn-download hidden" download="audiobook.mp3">
-                            ⬇️ Download MP3
-                        </a>
+                <!-- Quiz Panel -->
+                <div id="studyPanelQuiz" class="study-content-panel hidden">
+                    <div class="quiz-actions">
+                        <button id="generateQuizBtn" class="btn-primary btn-sm">Generate Quiz</button>
+                    </div>
+                    <div id="quizBox" class="quiz-box">
+                        <p class="placeholder-text">Click 'Generate Quiz' to take an interactive multiple-choice assessment.</p>
                     </div>
                 </div>
-            </section>
-        </main>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Accessibility Settings Drawer -->
+    <div id="accessibilityDrawer" class="drawer hidden" role="dialog" aria-label="Accessibility Settings">
+        <div class="drawer-header">
+            <h3>♿ Accessibility Settings</h3>
+            <button id="closeDrawerBtn" class="btn-secondary btn-sm" aria-label="Close Drawer">✖</button>
+        </div>
+        <div class="drawer-body">
+            <div class="form-group">
+                <label for="highContrastToggle">High Contrast Theme:</label>
+                <button id="highContrastToggle" class="btn-secondary">Toggle High Contrast</button>
+            </div>
+            <div class="form-group">
+                <label for="dyslexiaFontToggle">Dyslexia-Friendly Font (OpenDyslexic):</label>
+                <button id="dyslexiaFontToggle" class="btn-secondary">Toggle OpenDyslexic Font</button>
+            </div>
+            <div class="form-group">
+                <label for="textSizeSelect">Text Size:</label>
+                <select id="textSizeSelect" class="custom-select">
+                    <option value="normal" selected>Normal</option>
+                    <option value="large">Large (120%)</option>
+                    <option value="xlarge">Extra Large (150%)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="reducedMotionToggle">Reduced Motion:</label>
+                <button id="reducedMotionToggle" class="btn-secondary">Toggle Reduced Motion</button>
+            </div>
+            <div class="keyboard-shortcuts-info">
+                <h4>⌨️ Keyboard Shortcuts</h4>
+                <ul>
+                    <li><kbd>Space</kbd> / <kbd>K</kbd>: Play / Pause Audio</li>
+                    <li><kbd>M</kbd>: Toggle Mute</li>
+                    <li><kbd>N</kbd>: Next Sentence</li>
+                    <li><kbd>?</kbd>: Open Help</li>
+                </ul>
+            </div>
+        </div>
     </div>
 
     <script src="/static/app.js"></script>

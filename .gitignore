@@ -5,6 +5,7 @@ __pycache__/
 *.srt
 .DS_Store
 .env
+data_storage/
 build/
 dist/
 *.spec
