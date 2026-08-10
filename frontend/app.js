@@ -627,6 +627,28 @@ document.addEventListener('DOMContentLoaded', () => {
         draw();
     }
 
+    // --- Theme Switcher Logic ---
+    const themeSelect = document.getElementById('themeSelect');
+    if (themeSelect) {
+        themeSelect.addEventListener('change', (e) => {
+            applyTheme(e.target.value);
+        });
+    }
+
+    function applyTheme(themeName) {
+        document.body.classList.remove('theme-navy', 'theme-black', 'theme-emerald', 'theme-charcoal', 'theme-light');
+        document.body.classList.add(themeName);
+        localStorage.setItem('selectedTheme', themeName);
+        if (themeSelect) themeSelect.value = themeName;
+    }
+
+    function loadThemeSettings() {
+        const savedTheme = localStorage.getItem('selectedTheme') || 'theme-navy';
+        applyTheme(savedTheme);
+    }
+
+    loadThemeSettings();
+
     // --- Accessibility Settings State ---
     accessibilityToggleBtn.onclick = () => accessibilityDrawer.classList.remove('hidden');
     closeDrawerBtn.onclick = () => accessibilityDrawer.classList.add('hidden');

@@ -26,6 +26,16 @@
         </div>
 
         <nav class="main-nav" aria-label="Main Navigation">
+            <div class="theme-picker-group">
+                <label for="themeSelect" class="sr-only">Theme:</label>
+                <select id="themeSelect" class="custom-select theme-select" aria-label="Select Color Theme">
+                    <option value="theme-navy" selected>💙 Solid Navy Blue</option>
+                    <option value="theme-black">🖤 Solid Pitch Black</option>
+                    <option value="theme-emerald">🌲 Solid Forest Green</option>
+                    <option value="theme-charcoal">⚙️ Solid Charcoal Gray</option>
+                    <option value="theme-light">☀️ Solid Clean Light</option>
+                </select>
+            </div>
             <button class="nav-btn active" data-target="viewLibrary" aria-controls="viewLibrary">📚 Library</button>
             <button class="nav-btn" data-target="viewStudio" aria-controls="viewStudio">📖 Reader & Studio</button>
             <button class="nav-btn" data-target="viewChat" aria-controls="viewChat">💬 Doc Chat</button>
