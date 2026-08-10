@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDFtoAudio v2 — AI Audio & Podcast Studio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="app-background">
+        <div class="glow-orb orb-1"></div>
+        <div class="glow-orb orb-2"></div>
+    </div>
+
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="logo-group">
+                <div class="logo-icon">🎧</div>
+                <div class="logo-text">
+                    <h1>PDFtoAudio <span class="badge-v2">v2.0 AI</span></h1>
+                    <p>Transform PDF documents into Neural AI Audiobooks & 2-Host Podcasts</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <span class="status-indicator"><span class="dot"></span> Neural Engine Ready</span>
+            </div>
+        </header>
+
+        <!-- Main Upload Hero (Shown initially) -->
+        <section id="uploadSection" class="upload-hero">
+            <div class="dropzone" id="dropzone">
+                <div class="dropzone-icon">📄</div>
+                <h2>Drop your PDF file here</h2>
+                <p>or click to browse from your device</p>
+                <input type="file" id="pdfFileInput" accept=".pdf" class="file-input">
+                <div class="supported-tags">
+                    <span>⚡ PyMuPDF Engine</span>
+                    <span>🎙️ 50+ Neural Voices</span>
+                    <span>📻 AI Podcast Mode</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Studio Workspace (Hidden until PDF uploaded) -->
+        <main id="studioWorkspace" class="studio-workspace hidden">
+            <!-- Left Panel: PDF Document & Reader -->
+            <section class="panel pdf-panel">
+                <div class="panel-header">
+                    <div class="panel-title">
+                        <span class="icon">📖</span>
+                        <h3 id="pdfFilename">Document.pdf</h3>
+                    </div>
+                    <button id="reuploadBtn" class="btn-secondary btn-sm">🔄 Change PDF</button>
+                </div>
+
+                <!-- Metadata Summary Pills -->
+                <div class="metadata-bar">
+                    <div class="meta-pill"><span class="label">Pages</span><span id="metaPages" class="val">0</span></div>
+                    <div class="meta-pill"><span class="label">Words</span><span id="metaWords" class="val">0</span></div>
+                    <div class="meta-pill"><span class="label">Est. Time</span><span id="metaTime" class="val">0 min</span></div>
+                </div>
+
+                <!-- Chapter Selector -->
+                <div class="chapter-bar">
+                    <label for="chapterSelect">Chapter / Section:</label>
+                    <select id="chapterSelect" class="custom-select"></select>
+                </div>
+
+                <!-- Text Display Box (with sentence sync Karaoke) -->
+                <div id="readerContent" class="reader-content">
+                    <p class="placeholder-text">Select a chapter to view text content...</p>
+                </div>
+            </section>
+
+            <!-- Right Panel: Audio Control Studio -->
+            <section class="panel studio-panel">
+                <div class="panel-header">
+                    <div class="panel-title">
+                        <span class="icon">🎛️</span>
+                        <h3>Audio Studio Controls</h3>
+                    </div>
+                </div>
+
+                <!-- Studio Mode Tabs -->
+                <div class="mode-tabs">
+                    <button class="mode-tab active" data-mode="audiobook">🎧 Audiobook</button>
+                    <button class="mode-tab" data-mode="podcast">🎙️ AI Podcast</button>
+                    <button class="mode-tab" data-mode="subtitles">📑 Captions/Export</button>
+                </div>
+
+                <!-- Audiobook Mode Options -->
+                <div id="modeOptionsAudiobook" class="mode-options-panel">
+                    <div class="form-group">
+                        <label for="voiceSelect">Neural AI Voice:</label>
+                        <select id="voiceSelect" class="custom-select"></select>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group half">
+                            <label for="speedSelect">Speaking Speed:</label>
+                            <select id="speedSelect" class="custom-select">
+                                <option value="0.75x">0.75x (Slower)</option>
+                                <option value="+0%" selected>1.0x (Normal)</option>
+                                <option value="+25%">1.25x (Fast)</option>
+                                <option value="+50%">1.5x (Faster)</option>
+                                <option value="+100%">2.0x (Speedy)</option>
+                            </select>
+                        </div>
+                        <div class="form-group half">
+                            <label for="scopeSelect">Conversion Scope:</label>
+                            <select id="scopeSelect" class="custom-select">
+                                <option value="chapter" selected>Current Chapter</option>
+                                <option value="full">Entire Document</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Podcast Mode Options -->
+                <div id="modeOptionsPodcast" class="mode-options-panel hidden">
+                    <div class="podcast-info-box">
+                        <h4>🎙️ 2-Host Conversational Dialogue</h4>
+                        <p>Automatically transforms your PDF into an engaging 2-person podcast episode hosted by <strong>Alex</strong> (Male Storyteller) and <strong>Sam</strong> (Female Studio Host).</p>
+                    </div>
+                </div>
+
+                <!-- Subtitles Mode Options -->
+                <div id="modeOptionsSubtitles" class="mode-options-panel hidden">
+                    <div class="subtitle-actions">
+                        <button id="exportVttBtn" class="btn-secondary">📥 Download .VTT Captions</button>
+                        <button id="exportSrtBtn" class="btn-secondary">📥 Download .SRT Captions</button>
+                    </div>
+                </div>
+
+                <!-- Synthesize Action Button -->
+                <button id="generateAudioBtn" class="btn-primary btn-large">
+                    <span class="btn-icon">⚡</span> Generate AI Audio
+                </button>
+
+                <!-- Audio Visualizer Canvas -->
+                <div class="visualizer-container">
+                    <canvas id="visualizerCanvas"></canvas>
+                </div>
+
+                <!-- Audio Player Container -->
+                <div class="player-container">
+                    <audio id="audioPlayer" controls class="custom-audio-player"></audio>
+                    <div class="player-extra-controls">
+                        <a id="downloadAudioBtn" class="btn-download hidden" download="audiobook.mp3">
+                            ⬇️ Download MP3
+                        </a>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>

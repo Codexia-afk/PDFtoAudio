@@ -1,99 +1,89 @@
-# 📚 PDF to Audiobook Converter
+# 🎧 PDFtoAudio v2 — AI Audio & Podcast Studio
 
-Convert PDF documents into spoken audio using Python and Text-to-Speech technology.
+> Convert PDF documents into hyper-realistic **Neural AI Audiobooks** and engaging **2-Host AI Podcasts** with live sentence-synced text highlighting.
 
-## 🚀 Overview
+![PDFtoAudio v2 Banner](asset/Screenshot.png)
 
-PDF to Audiobook Converter is a Python-based project that allows users to select a PDF file and convert its text content into speech. The application extracts text from PDF pages and reads it aloud using a Text-to-Speech engine, making it useful for students, readers, and accessibility purposes.
+---
 
-This project was initially developed as a desktop-based Python application and is planned to be extended into a full web application.
+## ✨ What's New in v2.0
 
-## ✨ Features
+* 🎙️ **Hyper-Realistic Neural AI Voices**: Built-in support for **50+ Microsoft Neural AI voices** (`edge-tts`) across English, Hindi, Bengali, Spanish, French, German, Japanese, and more.
+* 📻 **AI Podcast Mode**: Automatically transforms long PDF documents into an entertaining **2-host conversational podcast show** hosted by Alex and Sam!
+* 📖 **Smart PDF & Chapter Parser**: Powered by `PyMuPDF` (`fitz`) to extract clean text while filtering out header/footer noise, page numbers, and inline citation clutter.
+* 🎛️ **Modern Glassmorphism Web Studio UI**: Features a side-by-side interactive PDF reader and audio studio with real-time waveform visualizers.
+* 🎤 **Karaoke / Live Sentence Sync**: Sentence-by-sentence text highlighting synced directly with spoken audio playback.
+* ⚡ **Playback Speed & Custom Scope**: Adjustable playback speeds (0.75x to 2.0x) and chapter-by-chapter or full document conversion.
+* 📑 **Caption Exports**: One-click generation and export of `.VTT` and `.SRT` subtitle files.
+* 💻 **Dual Mode (Web UI + CLI)**: Run as a full web app studio or run directly from the command line.
 
-* Select and process PDF files
-* Extract text from PDF documents
-* Convert text into speech
-* Simple and lightweight implementation
-* Beginner-friendly Python project
-* Useful for accessibility and audiobook generation
+---
 
-## 🛠️ Technologies Used
+## 🛠️ Tech Stack
 
-* Python
-* PyPDF2
-* pyttsx3
-* Tkinter
+* **Backend**: Python 3.14, FastAPI, Uvicorn, PyMuPDF (`fitz`), PyPDF2
+* **Audio & Speech**: `edge-tts` (Microsoft Neural AI), `gTTS`
+* **Frontend**: HTML5, Vanilla CSS3 (Dark Glassmorphism Design System), JavaScript (ES6+), Canvas API
+* **Deployment**: Uvicorn ASGI Server
+
+---
 
 ## 📦 Installation
 
-Clone the repository:
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/Codexia-afk/PDFtoAudio.git
+   cd PDFtoAudio
+   ```
 
-```bash
-git clone https://github.com/your-username/pdf-to-audiobook.git
-cd pdf-to-audiobook
-```
+2. **Install Python dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-Install dependencies:
+---
 
-```bash
-pip install -r requirements.txt
-```
+## 🚀 Quick Start
 
-Run the application:
+### 🌐 Option A: Launch Web Studio (Recommended)
+
+Run the unified launcher:
 
 ```bash
 python main.py
 ```
 
-## 📋 How It Works
+This will automatically launch the Web Studio server at `http://127.0.0.1:8000` and open your default web browser!
 
-1. Launch the application.
-2. Select a PDF file from your computer.
-3. The application extracts text from the PDF.
-4. The text is converted into speech.
-5. The audiobook is played or saved based on the implementation.
+### 💻 Option B: Legacy CLI Mode
 
-## 🔮 Future Improvements
+To convert a PDF directly to audio from the terminal:
 
-Planned upgrades include:
+```bash
+python main.py --cli --pdf document.pdf --output my_audiobook.mp3 --voice en-US-GuyNeural
+```
 
-* Web-based interface
-* Drag-and-drop PDF upload
-* Download generated audiobooks as MP3
-* Multiple voice options
-* Adjustable speech speed
-* Dark mode UI
-* User authentication
-* Cloud storage support
+---
 
-### 🌍 Multi-Language Support (Planned)
+## 🔌 API Endpoints
 
-The future web application will support audiobook generation in multiple languages, including:
+| Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| `GET` | `/` | Serves the Web Studio UI |
+| `GET` | `/api/voices` | Returns JSON list of available AI voices |
+| `POST` | `/api/upload-pdf` | Upload PDF file & extract chapters, metadata, sentences |
+| `POST` | `/api/tts` | Synthesize neural TTS audio stream (`audio/mpeg`) |
+| `POST` | `/api/podcast` | Synthesize 2-host podcast audio episode |
+| `POST` | `/api/export-subtitles` | Generate downloadable `.VTT` or `.SRT` captions |
 
-* English
-* Hindi
-* Bengali
-* Sanskrit
-* And many other languages
-
-Users will simply upload a PDF, choose their preferred language, and generate an audiobook with a single click.
-
-
-
-### PDF Selection Interface
-
-![PDF Selection Interface](asset/Screenshot.png)
-
-The application allows users to select any PDF document from their system and convert it into an audiobook using Text-to-Speech technology.
+---
 
 ## 🤝 Contributing
 
-Contributions, suggestions, and feature requests are welcome.
+Contributions, feature requests, and pull requests are always welcome! Feel free to check the issues page.
+
+---
 
 ## 📄 License
 
-This project is licensed under the MIT License.
-
-## 👨‍💻 Author
-
-Developed by Codexia_afk as a learning project to explore PDF processing, text extraction, and Text-to-Speech technologies in Python.
+Distributed under the MIT License. Developed by **Codexia_afk**.
